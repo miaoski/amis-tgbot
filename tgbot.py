@@ -11,7 +11,7 @@ CONFIG_FILE = 'tgbot.cfg'
 
 def handle(msg):
     db = amis.loaddb()
-    num = re.compile(r'[0-9]+')
+    num = re.compile(r'^[0-9]+$')
     try:
         userid = msg['from']['id']
         username = msg['from']['username']
