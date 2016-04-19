@@ -26,13 +26,15 @@ def isCJK(s):
     return re.match(r'[\u00-\uff]+', s) is None
 
 
-def iterrows(cur, uid):
+def iterrows(cur, uid = None):
     global USER_LASTWORD
     i = 1
     r = ''
-    USER_LASTWORD[uid] = [None,]
+    if uid:
+        USER_LASTWORD[uid] = [None,]
     for row in cur:
-        USER_LASTWORD[uid].append(row[0])
+        if uid:
+            USER_LASTWORD[uid].append(row[0])
         r += '%d. %s\n' % (i, row[0])
         i += 1
     return r
@@ -53,7 +55,7 @@ def lookup(db, s, uid):
         rows = cur.fetchall()
         if len(rows) > 0:    # 找到了
             USER_LASTWORD[uid] = [s,]
-            return iterrows(rows, '') + u'要看例句請輸入 0'
+            return iterrows(rows, None) + u'要看例句請輸入 0'
         cur.execute('SELECT amis FROM fuzzy WHERE fuzz LIKE ?', ('%%' + fuzzme(s) + '%%', ))
         rows = cur.fetchall()
         if len(rows) == 0:
